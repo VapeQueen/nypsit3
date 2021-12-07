@@ -8,7 +8,8 @@ const { CustomEmbed, ErrorEmbed } = require("./classes/EmbedBuilders.js")
 const { MStoTime, getNews, formatDate, isLockedOut, createCaptcha, toggleLock } = require("./utils.js")
 const { info, types, error } = require("./logger.js")
 const { getCommand, addUse } = require("./premium/utils.js")
-const { start } = require("repl")
+const { REST } = require("@discordjs/rest")
+const { Routes } = require("discord-api-types/v9")
 
 const commands = new Map()
 const aliases = new Map()
@@ -34,7 +35,12 @@ function loadCommands() {
         aliases.clear()
     }
 
+    const slashCommands = []
+
     for (let file of commandFiles) {
+        /**
+         * @type {Command}
+         */
         let command
 
         try {
@@ -59,6 +65,10 @@ function loadCommands() {
                         }
                     }
                 }
+
+                if (command.data) {
+                    slashCommands.push(command.data.toJSON())
+                }
             } else {
                 failedTable.push([file, "❌"])
                 error(file + " missing name, description, category or run")
@@ -77,6 +87,30 @@ function loadCommands() {
 
     info(`${commands.size.toLocaleString()} commands loaded`)
     info(`${aliases.size.toLocaleString()} aliases loaded`)
+}
+
+/**
+ * 
+ * @param {String} botId 
+ * @param {Array<JSON>}
+ */
+async function uploadCommands(botId, data) {
+    const { token } = require("../config.json")
+    let guildOnly = true
+
+    if (guildOnly) {
+        const guildId = "747056029795221513"
+
+        info(`uploading slash ${data.length} commands..`)
+
+        const rest = new REST({ version: "9" }).setToken(token)
+
+        await rest.put(Routes.applicationGuildCommands(botId, guildId), {
+            body: data
+        })
+
+        info("uploaded slash commands")
+    }
 }
 
 /**
