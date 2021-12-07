@@ -1,4 +1,5 @@
 const { Message } = require("discord.js")
+const { SlashCommandBuilder } = require("@discordjs/builders")
 const { isPremium } = require("../utils/premium/utils")
 const { Command, categories } = require("../utils/classes/Command")
 const { CustomEmbed, ErrorEmbed } = require("../utils/classes/EmbedBuilders.js")
@@ -84,5 +85,16 @@ async function run(message, args) {
 }
 
 cmd.setRun(run)
+
+const data = new SlashCommandBuilder()
+    .setName("8ball")
+    .setDescription("ask the 8ball a question")
+    .addStringOption(option => {
+        option.setName("question")
+            .setDescription("ask the 8ball a question")
+            .setRequired(true)
+    })
+
+cmd.setInteractionData(data)
 
 module.exports = cmd
