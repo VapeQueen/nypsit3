@@ -1,3 +1,5 @@
+const { SlashCommandBuilder } = require("@discordjs/builders")
+
 class Command {
     /**
      * @returns {Command}
@@ -40,6 +42,16 @@ class Command {
      */
     setRun(run) {
         this.run = run
+        return this
+    }
+
+    /**
+     * @param {SlashCommandBuilder} data
+     * @returns {Command}
+     */
+    setInteractionData(data) {
+        this.data = data
+
         return this
     }
 }
