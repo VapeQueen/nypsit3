@@ -13,6 +13,7 @@ const { Routes } = require("discord-api-types/v9")
 
 const commands = new Map()
 const aliases = new Map()
+let slashCommands = []
 const popularCommands = new Map()
 const noLifers = new Map()
 const xpCooldown = new Set()
@@ -23,6 +24,10 @@ const beingChecked = []
 
 let restarting = false
 
+/**
+ * 
+ * @param {String} botId 
+ */
 function loadCommands() {
     const commandFiles = fs.readdirSync("./commands/").filter((file) => file.endsWith(".js"))
     const failedTable = []
@@ -33,9 +38,8 @@ function loadCommands() {
         }
         commands.clear()
         aliases.clear()
+        slashCommands = []
     }
-
-    const slashCommands = []
 
     for (let file of commandFiles) {
         /**
@@ -112,6 +116,8 @@ async function uploadCommands(botId, data) {
         info("uploaded slash commands")
     }
 }
+
+exports.uploadCommands = uploadCommands
 
 /**
  *
