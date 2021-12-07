@@ -114,6 +114,8 @@ async function uploadCommands(botId) {
 
         info("uploaded slash commands")
     }
+    
+    return
 }
 
 exports.uploadCommands = uploadCommands

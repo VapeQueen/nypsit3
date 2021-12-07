@@ -1,5 +1,5 @@
 const { Client } = require("discord.js")
-const { getRandomCommand } = require("../utils/commandhandler")
+const { getRandomCommand, uploadCommands } = require("../utils/commandhandler")
 const { info, types } = require("../utils/logger")
 const { daysUntilChristmas } = require("../utils/utils")
 
@@ -76,6 +76,8 @@ module.exports = async (client, startUp) => {
     info("commands count: " + commandsSize, types.INFO)
 
     info("logged in as " + client.user.tag, types.INFO)
+
+    await uploadCommands(client.user.id)
 
     const now = Date.now()
     const timeTaken = (now - startUp) / 1000
