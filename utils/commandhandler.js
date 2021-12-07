@@ -96,21 +96,20 @@ function loadCommands() {
 /**
  * 
  * @param {String} botId 
- * @param {Array<JSON>}
  */
-async function uploadCommands(botId, data) {
+async function uploadCommands(botId) {
     const { token } = require("../config.json")
     let guildOnly = true
 
     if (guildOnly) {
         const guildId = "747056029795221513"
 
-        info(`uploading slash ${data.length} commands..`)
+        info(`uploading slash ${slashCommands.length} commands..`)
 
         const rest = new REST({ version: "9" }).setToken(token)
 
         await rest.put(Routes.applicationGuildCommands(botId, guildId), {
-            body: data
+            body: slashCommands
         })
 
         info("uploaded slash commands")
